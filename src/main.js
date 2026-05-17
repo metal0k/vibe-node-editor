@@ -4,11 +4,12 @@ import './styles/app.css';
 import './styles/inspector.css';
 
 import { initTheme } from './ui/theme.js';
-import { initToolbar } from './ui/toolbar.js';
+import { initToolbar, setValidateHandler } from './ui/toolbar.js';
 import { initInspector } from './ui/inspector.js';
 import { initEditor } from './editor/setup.js';
 import { applyNodeTheme } from './editor/node-theme.js';
 import { initPersistence } from './editor/persistence.js';
+import { initValidator } from './editor/validator.js';
 import { buildSampleGraph } from './editor/sample-graph.js';
 
 initTheme();
@@ -17,6 +18,9 @@ initToolbar();
 const { graph, lcanvas } = initEditor();
 applyNodeTheme(lcanvas);
 initInspector({ graph, lcanvas });
+
+const validate = initValidator({ graph, lcanvas });
+setValidateHandler(validate);
 
 const source = initPersistence({ graph, lcanvas });
 if (source === 'sample') {
