@@ -1,6 +1,5 @@
 import { LGraph, LGraphCanvas, LiteGraph } from 'litegraph.js';
 import { registerAllNodes, VIBE_NODE_TYPES } from './nodes/index.js';
-import { buildSampleGraph } from './sample-graph.js';
 
 export function initEditor() {
   const canvas = document.getElementById('graph-canvas');
@@ -36,9 +35,6 @@ export function initEditor() {
   resizeCanvasToParent(canvas);
   const onResize = () => resizeCanvasToParent(canvas);
   window.addEventListener('resize', onResize);
-
-  // Build sample graph (replaced later by persistence on startup)
-  buildSampleGraph(graph);
 
   window.__editor = { graph, lcanvas, LiteGraph };
   return { graph, lcanvas };

@@ -1,3 +1,11 @@
+import {
+  saveJsonFile,
+  loadJsonFile,
+  frameAll,
+  fitSelection,
+  copyShareUrl,
+} from '../editor/persistence.js';
+
 const BUTTON_GROUPS = [
   [
     { id: 'save-json', label: 'Save', title: 'Save JSON  (Ctrl+S)' },
@@ -13,6 +21,12 @@ const BUTTON_GROUPS = [
   ],
 ];
 
+let validateHandler = null;
+
+export function setValidateHandler(fn) {
+  validateHandler = fn;
+}
+
 export function initToolbar() {
   const host = document.getElementById('topbar-actions');
   if (!host) return;
@@ -27,17 +41,52 @@ export function initToolbar() {
       el.id = `btn-${btn.id}`;
       el.title = btn.title;
       el.textContent = btn.label;
-      el.addEventListener('click', () => {
-        // Stage 5/6/7 will replace these stubs with real handlers
-        toast(`${btn.label}: not yet implemented`, 'info');
-      });
+      el.addEventListener('click', () => handleAction(btn.id));
       wrap.appendChild(el);
     }
     host.appendChild(wrap);
   }
 }
 
-/* ── Toast helper (exported for use by other modules) ───── */
+async function handleAction(id) {
+  try {
+    switch (id) {
+      case 'save-json': {
+        const filename = saveJsonFile();
+        toast(`Saved ${filename}`, 'success');
+        break;
+      }
+      case 'load-json': {
+        const filename = await loadJsonFile();
+        if (filename) toast(`Loaded ${filename}`, 'success');
+        break;
+      }
+      case 'fit-selection':
+        fitSelection();
+        break;
+      case 'frame-all':
+        frameAll();
+        break;
+      case 'share': {
+        const url = await copyShareUrl();
+        toast('Share URL copied to clipboard', 'success');
+        console.info('[vibe] share URL:', url);
+        break;
+      }
+      case 'validate':
+        if (validateHandler) validateHandler();
+        else toast('Validator not ready', 'warn');
+        break;
+      default:
+        toast(`Unknown action: ${id}`, 'warn');
+    }
+  } catch (err) {
+    console.error(err);
+    toast(err.message || String(err), 'error', 4000);
+  }
+}
+
+/* ── Toast helper ───────────────────────────────────────── */
 let toastHost = null;
 export function toast(message, kind = 'info', ttl = 2400) {
   if (!toastHost) toastHost = document.getElementById('toast-host');
@@ -53,7 +102,7 @@ export function toast(message, kind = 'info', ttl = 2400) {
   }, ttl);
 }
 
-/* ── Selected count updater ──────────────────────────────── */
+/* ── Selected count updater ─────────────────────────────── */
 export function updateSelectedCount(n) {
   const el = document.getElementById('selected-count');
   if (!el) return;
