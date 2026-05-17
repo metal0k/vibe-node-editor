@@ -78,7 +78,7 @@
   font-weight: 500;
   letter-spacing: var(--tracking-xwide);
   text-transform: uppercase;
-  color: var(--text-faint);
+  color: var(--text-muted);
   margin: 0 0 10px;
   display: flex;
   align-items: center;

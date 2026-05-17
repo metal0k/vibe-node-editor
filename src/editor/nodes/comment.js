@@ -21,7 +21,7 @@ CommentNode.prototype.onExecute = function () {};
 CommentNode.prototype.onDrawBackground = function (ctx) {
   if (this.flags && this.flags.collapsed) return;
   ctx.save();
-  ctx.fillStyle = 'rgba(250, 204, 21, 0.06)';
+  ctx.fillStyle = 'rgba(250, 204, 21, 0.04)';
   ctx.fillRect(0, 0, this.size[0], this.size[1]);
   ctx.restore();
 };
@@ -29,26 +29,30 @@ CommentNode.prototype.onDrawBackground = function (ctx) {
 CommentNode.prototype.onDrawForeground = function (ctx) {
   if (this.flags && this.flags.collapsed) return;
   const padding = 12;
+  const titleColor = readToken('--canvas-comment-title');
+  const bodyColor = readToken('--canvas-comment-body');
   ctx.save();
 
   // Title bar
   ctx.font = '600 11px JetBrains Mono, monospace';
-  ctx.fillStyle = 'rgba(250, 204, 21, 0.95)';
+  ctx.fillStyle = titleColor;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
   ctx.fillText((this.properties.title || '').toUpperCase(), padding, padding);
 
-  // Divider
-  ctx.strokeStyle = 'rgba(250, 204, 21, 0.35)';
+  // Divider — derive from title color at low alpha via stroke trick
+  ctx.strokeStyle = titleColor;
+  ctx.globalAlpha = 0.35;
   ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.moveTo(padding, padding + 18);
   ctx.lineTo(this.size[0] - padding, padding + 18);
   ctx.stroke();
+  ctx.globalAlpha = 1;
 
   // Body text (multiline, wrap)
   ctx.font = '400 12px "IBM Plex Sans", system-ui, sans-serif';
-  ctx.fillStyle = 'rgba(233, 237, 243, 0.85)';
+  ctx.fillStyle = bodyColor;
   wrapText(
     ctx,
     this.properties.comment || '',
@@ -60,6 +64,10 @@ CommentNode.prototype.onDrawForeground = function (ctx) {
 
   ctx.restore();
 };
+
+function readToken(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
 
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   const lines = String(text).split(/\r?\n/);

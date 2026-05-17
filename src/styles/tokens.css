@@ -54,6 +54,7 @@
   --accent:        #facc15;        /* brand amber */
   --accent-hover:  #fde047;
   --accent-soft:   rgba(250, 204, 21, 0.12);
+  --accent-text:   #0a0d11;        /* dark text on bright yellow */
 
   --selection:     #06b6d4;        /* teal */
   --selection-soft: rgba(6, 182, 212, 0.18);
@@ -83,6 +84,11 @@
   --link-default:  #facc15;
   --link-error:    #f87171;
   --link-success:  #34d399;
+
+  /* Canvas text — read by per-node draw routines (multiply/default/comment) */
+  --canvas-badge-text:         rgba(250, 204, 21, 0.85);   /* amber result badge */
+  --canvas-comment-title:      rgba(250, 204, 21, 0.95);   /* comment title */
+  --canvas-comment-body:       rgba(233, 237, 243, 0.92);  /* comment body text */
 
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
@@ -115,9 +121,10 @@
   --text-muted:    #5e6470;
   --text-faint:    #9aa0aa;
 
-  --accent:        #a17400;        /* deep amber, readable on white */
-  --accent-hover:  #7f5b00;
-  --accent-soft:   rgba(161, 116, 0, 0.10);
+  --accent:        #8a6300;        /* deeper amber, AA-readable on white */
+  --accent-hover:  #6e4f00;
+  --accent-soft:   rgba(138, 99, 0, 0.10);
+  --accent-text:   #ffffff;        /* white text on deep amber */
 
   --selection:     #0891b2;        /* teal-600 */
   --selection-soft: rgba(8, 145, 178, 0.10);
@@ -143,9 +150,14 @@
   --port-any:      #6f4ea8;
 
   /* Links */
-  --link-default:  #a17400;
+  --link-default:  #8a6300;
   --link-error:    #dc2626;
   --link-success:  #16a34a;
+
+  /* Canvas text — darker variants for light bg */
+  --canvas-badge-text:         #8a6300;                    /* deep amber on white */
+  --canvas-comment-title:      #6e4f00;                    /* even deeper for cream bg */
+  --canvas-comment-body:       #15181d;                    /* near-black on cream */
 
   /* Shadows — soft cool */
   --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);

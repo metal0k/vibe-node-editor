@@ -24,11 +24,15 @@ MultiplyNode.prototype.onDrawForeground = function (ctx) {
   const text = formatNumber(this._lastResult);
   ctx.save();
   ctx.font = '500 10px JetBrains Mono, monospace';
-  ctx.fillStyle = 'rgba(250, 204, 21, 0.85)';
+  ctx.fillStyle = readToken('--canvas-badge-text');
   ctx.textAlign = 'right';
   ctx.fillText(text, this.size[0] - 8, this.size[1] - 6);
   ctx.restore();
 };
+
+function readToken(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
 
 export function registerMultiplyNode() {
   LiteGraph.registerNodeType('vibe/multiply', MultiplyNode);
