@@ -9,14 +9,18 @@ let autosaveTimer = null;
 export function initPersistence({ graph, lcanvas }) {
   refs = { graph, lcanvas };
 
-  // Auto-save on any change (debounced 300ms)
-  const trigger = () => scheduleAutosave();
-  hookAfter(graph, 'onNodeAdded', trigger);
-  hookAfter(graph, 'onNodeRemoved', trigger);
-  hookAfter(graph, 'onConnectionChange', trigger);
-  hookAfter(graph, 'onAfterChange', trigger);
-  // Property edits via inspector also call setDirtyCanvas — wrap to autosave
-  hookAfter(graph, 'onAfterStep', trigger);
+  // Auto-save on structural changes only (debounced 300ms)
+  if (!graph.__vibePersistenceHooked) {
+    const trigger = () => scheduleAutosave();
+    hookAfter(graph, 'onNodeAdded', trigger);
+    hookAfter(graph, 'onNodeRemoved', trigger);
+    hookAfter(graph, 'onConnectionChange', trigger);
+    hookAfter(graph, 'onAfterChange', trigger);
+    graph.__vibePersistenceHooked = true;
+  }
+
+  // Expose for inspector property changes to trigger autosave explicitly
+  graph.__vibeAutosave = () => scheduleAutosave();
 
   // Initial load: URL hash > localStorage > sample
   const restored = restoreOnStartup(graph);
@@ -62,6 +66,9 @@ export function loadJsonFile() {
       try {
         const text = await file.text();
         const data = JSON.parse(text);
+        if (!validateGraphPayload(data)) {
+          throw new Error('Invalid or unsafe graph payload');
+        }
         refs.graph.configure(data);
         refs.graph.runStep();
         resolve(file.name);
@@ -72,6 +79,34 @@ export function loadJsonFile() {
     document.body.appendChild(input);
     input.click();
   });
+}
+
+/**
+ * Sanity-check a deserialized graph object before feeding it to LiteGraph.
+ * Rejects oversize payloads and unknown node types. Returns true if safe.
+ */
+const MAX_NODES = 5000;
+const MAX_LINKS = 20000;
+const ALLOWED_TYPES = new Set([
+  'vibe/value', 'vibe/multiply', 'vibe/default', 'vibe/comment',
+]);
+
+export function validateGraphPayload(data) {
+  if (!data || typeof data !== 'object') return false;
+  const nodes = Array.isArray(data._nodes) ? data._nodes : data.nodes;
+  if (!Array.isArray(nodes)) return false;
+  if (nodes.length > MAX_NODES) return false;
+  for (const n of nodes) {
+    if (!n || typeof n !== 'object') return false;
+    if (n.type && !ALLOWED_TYPES.has(n.type)) return false;
+  }
+  if (data.links) {
+    const links = Array.isArray(data.links)
+      ? data.links
+      : Object.values(data.links);
+    if (links.length > MAX_LINKS) return false;
+  }
+  return true;
 }
 
 /* ── localStorage autosave / restore ────────────────────── */
@@ -92,7 +127,7 @@ function scheduleAutosave() {
 function restoreOnStartup(graph) {
   // URL hash takes priority
   const hashData = readHashGraph();
-  if (hashData) {
+  if (hashData && validateGraphPayload(hashData)) {
     try {
       graph.configure(hashData);
       graph.runStep();
@@ -100,19 +135,23 @@ function restoreOnStartup(graph) {
     } catch (err) {
       console.warn('[vibe] failed to restore from URL:', err);
     }
+  } else if (hashData) {
+    console.warn('[vibe] URL payload rejected by validation');
   }
   // localStorage second
   const stored = localStorage.getItem(LS_KEY);
   if (stored) {
     try {
-      graph.configure(JSON.parse(stored));
-      graph.runStep();
-      return 'localStorage';
+      const parsed = JSON.parse(stored);
+      if (validateGraphPayload(parsed)) {
+        graph.configure(parsed);
+        graph.runStep();
+        return 'localStorage';
+      }
     } catch (err) {
       console.warn('[vibe] failed to restore from localStorage:', err);
     }
   }
-  // Fall back to sample (already built in setup.js)
   return 'sample';
 }
 

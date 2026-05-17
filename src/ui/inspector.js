@@ -67,18 +67,41 @@ function patchCanvasSelection(lcanvas) {
 }
 
 function hookPropertyMirror(graph) {
-  // Re-render inspector when a selected node moves/resizes
-  setInterval(() => {
+  // Re-mirror inspector inputs when a selected node moves/resizes
+  if (graph.__vibeMirrorHooked) return;
+  graph.__vibeMirrorHooked = true;
+
+  const trigger = () => {
     if (!editorRefs || currentNodeIds.length === 0) return;
-    const { graph: g } = editorRefs;
     const selectedNow = getSelectedNodes(editorRefs.lcanvas);
-    // Just refresh values for the visible node(s), but don't lose focus
-    if (selectedNow.length === 1) {
-      mirrorSingleNodeFields(selectedNow[0]);
-    }
-    // selection count
+    if (selectedNow.length === 1) mirrorSingleNodeFields(selectedNow[0]);
     updateSelectedCount(selectedNow.length);
-  }, 200);
+  };
+
+  // LiteGraph fires these on drag / resize commit; supplement with rAF poll
+  // only while pointer is down (handled via canvas mousedown/mouseup below).
+  const origNodeMoved = graph.onNodeMoved;
+  graph.onNodeMoved = function (node) {
+    if (origNodeMoved) origNodeMoved.call(this, node);
+    trigger();
+  };
+
+  const lcanvas = editorRefs.lcanvas;
+  const canvas = lcanvas.canvas;
+  if (canvas) {
+    let rafId = null;
+    const tick = () => { trigger(); rafId = requestAnimationFrame(tick); };
+    canvas.addEventListener('mousedown', () => {
+      if (rafId == null) rafId = requestAnimationFrame(tick);
+    });
+    canvas.addEventListener('mouseup', () => {
+      if (rafId != null) { cancelAnimationFrame(rafId); rafId = null; }
+      trigger();
+    });
+    canvas.addEventListener('mouseleave', () => {
+      if (rafId != null) { cancelAnimationFrame(rafId); rafId = null; }
+    });
+  }
 }
 
 function getSelectedNodes(lcanvas) {
@@ -215,6 +238,7 @@ function updateNode(node, mutator, runStep = false) {
     node.setDirtyCanvas?.(true, true);
     if (runStep && editorRefs?.graph?.runStep) editorRefs.graph.runStep();
     editorRefs.lcanvas?.setDirty(true, true);
+    editorRefs?.graph?.__vibeAutosave?.();
   } finally {
     suppressFromCanvas = false;
   }

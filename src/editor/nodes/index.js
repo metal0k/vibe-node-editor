@@ -15,8 +15,12 @@ let registered = false;
 
 export function registerAllNodes() {
   if (registered) return;
-  // Remove LiteGraph's default node types so context menu only shows ours
-  LiteGraph.clearRegisteredTypes?.();
+  // Remove LiteGraph's default node types so only our 4 are reachable
+  if (LiteGraph.registered_node_types) {
+    for (const key of Object.keys(LiteGraph.registered_node_types)) {
+      if (!key.startsWith('vibe/')) delete LiteGraph.registered_node_types[key];
+    }
+  }
   registerValueNode();
   registerMultiplyNode();
   registerDefaultNode();

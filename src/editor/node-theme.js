@@ -17,6 +17,8 @@ const NODE_TYPE_COLORS = {
 export function applyNodeTheme(lcanvas) {
   if (!lcanvas) return;
   paint(lcanvas);
+  if (lcanvas.__vibeThemeSubscribed) return;
+  lcanvas.__vibeThemeSubscribed = true;
   onThemeChange(() => paint(lcanvas));
 }
 

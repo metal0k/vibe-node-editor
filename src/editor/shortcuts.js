@@ -7,8 +7,9 @@ import {
 import { toast } from '../ui/toolbar.js';
 
 /**
- * Wire keyboard shortcuts. All Ctrl-based ones preventDefault to avoid
- * fighting the browser. Inputs/textareas inside Inspector are exempt.
+ * Wire keyboard shortcuts. Plain keys (Delete, F, Esc) are skipped when
+ * focus is in an input/textarea. Ctrl+S/O fire globally (with preventDefault)
+ * because they shouldn't conflict with text editing.
  */
 export function initShortcuts({ graph, lcanvas }) {
   document.addEventListener('keydown', (e) => onKey(e, { graph, lcanvas }));
@@ -59,7 +60,7 @@ function onKey(e, { graph, lcanvas }) {
 
   if (inField) return;
 
-  if (key === 'delete' || key === 'backspace') {
+  if (key === 'delete') {
     e.preventDefault();
     deleteSelected(graph, lcanvas);
     return;

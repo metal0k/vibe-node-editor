@@ -8,7 +8,12 @@ export function ValueNode() {
   this.addWidget('number', 'value', this.properties.value, (v) => {
     this.properties.value = Number(v) || 0;
     this.setDirtyCanvas(true, true);
-    if (this.graph) this.graph.runStep();
+    // Reactivity: trigger a single re-evaluation when graph exists and
+    // we're not mid-configure (configuration restores widgets, no need to step)
+    if (this.graph && !this.graph._is_subgraph && this.graph.runStep) {
+      this.graph.runStep();
+      this.graph.__vibeAutosave?.();
+    }
   }, { precision: 3, step: 10 });
 }
 

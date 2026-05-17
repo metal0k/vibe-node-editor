@@ -7,6 +7,7 @@
  * Returns a structured report. Caller decides how to surface it.
  */
 
+import { LiteGraph } from 'litegraph.js';
 import { toast } from '../ui/toolbar.js';
 
 export function initValidator({ graph, lcanvas }) {
@@ -68,8 +69,10 @@ function overlayNodeOutline(node, ctx) {
   ctx.strokeStyle = color;
   ctx.lineWidth = width;
   ctx.setLineDash([4, 3]);
-  const h = (node.flags && node.flags.collapsed) ? node._collapsed_height || 24 : node.size[1];
-  ctx.strokeRect(-2, -2 - (node.titleHeight || 20), node.size[0] + 4, h + 4 + (node.titleHeight || 20));
+  const hasTitle = !(node.flags && (node.flags.no_title || node.type === 'vibe/comment'));
+  const titleH = hasTitle ? (LiteGraph.NODE_TITLE_HEIGHT || 30) : 0;
+  const h = (node.flags && node.flags.collapsed) ? (node._collapsed_height || 24) : node.size[1];
+  ctx.strokeRect(-2, -2 - titleH, node.size[0] + 4, h + 4 + titleH);
   ctx.restore();
 }
 
@@ -84,6 +87,12 @@ function runValidation({ graph, lcanvas }) {
   const links = graph.links || {};
 
   clearMarks();
+
+  if (nodes.length > 5000) {
+    toast('Graph too large to validate (>5000 nodes)', 'warn');
+    lcanvas.setDirty(true, true);
+    return { cycles: [], typeIssues: [], dangling: [], errors: 0, warnings: 0 };
+  }
 
   const cycles = detectCycles(nodes, links);
   const typeIssues = checkTypes(nodes, links);

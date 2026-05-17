@@ -17,18 +17,15 @@ export function initEditor() {
   const lcanvas = new LGraphCanvas(canvas, graph);
 
   // Reactive execution: run a step on any structural change or property change
-  graph.runStep = () => {
+  const baseRunStep = LGraph.prototype.runStep;
+  graph.runStep = function () {
     try {
-      graph.runStepOriginal
-        ? graph.runStepOriginal(1)
-        : LGraph.prototype.runStep.call(graph, 1);
+      baseRunStep.call(this, 1);
     } catch (err) {
       console.warn('[vibe] graph runStep error:', err);
     }
     lcanvas.setDirty(true, true);
   };
-  // Preserve original ref
-  graph.runStepOriginal = LGraph.prototype.runStep.bind(graph);
 
   hookReactivity(graph);
 
@@ -49,6 +46,7 @@ function resizeCanvasToParent(canvas) {
 }
 
 function hookReactivity(graph) {
+  if (graph.__vibeReactiveHooked) return;
   const originalAdded = graph.onNodeAdded;
   graph.onNodeAdded = function (node) {
     if (originalAdded) originalAdded.call(this, node);
@@ -66,6 +64,7 @@ function hookReactivity(graph) {
     if (originalConnect) originalConnect.call(this, node);
     graph.runStep();
   };
+  graph.__vibeReactiveHooked = true;
 }
 
 /**
@@ -73,6 +72,7 @@ function hookReactivity(graph) {
  * with only our 4 registered types, grouped under one "Add Node" submenu.
  */
 function customizeContextMenu() {
+  if (LGraphCanvas.prototype.__vibeMenuPatched) return;
   const originalGetCanvasMenu = LGraphCanvas.prototype.getCanvasMenuOptions;
   LGraphCanvas.prototype.getCanvasMenuOptions = function () {
     const options = originalGetCanvasMenu.call(this);
@@ -112,4 +112,5 @@ function customizeContextMenu() {
 
     return options;
   };
+  LGraphCanvas.prototype.__vibeMenuPatched = true;
 }
