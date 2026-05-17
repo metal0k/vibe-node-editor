@@ -1,25 +1,115 @@
+/* ============================================================
+   Vibe Node Editor — Inspector Panel
+   ============================================================ */
+
 .inspector {
   background: var(--bg-panel);
   border-right: 1px solid var(--border);
-  padding: 12px;
+  padding: 0;
   overflow-y: auto;
+  overflow-x: hidden;
+  font-family: var(--font-sans);
+  position: relative;
 }
 
+.inspector::-webkit-scrollbar { width: 8px; }
+.inspector::-webkit-scrollbar-track { background: transparent; }
+.inspector::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+.inspector::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
+
+/* ── Header ──────────────────────────────────────────── */
 .inspector__title {
-  margin: 0 0 12px;
-  font-size: 12px;
+  margin: 0;
+  padding: 14px 16px 12px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: var(--tracking-xwide);
   text-transform: uppercase;
   color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.inspector__title::after {
+  content: '';
+  display: block;
+  width: 8px; height: 8px;
+  border: 1.5px solid var(--accent);
+  transform: rotate(45deg);
+  opacity: 0.7;
 }
 
+.inspector__body {
+  padding: 14px 16px 20px;
+}
+
+/* ── Empty state ─────────────────────────────────────── */
 .inspector__empty {
-  color: var(--text-muted);
-  font-size: 13px;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
   margin: 0;
+  padding: 24px 0;
+  text-align: center;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
 }
 
+/* ── Sections ────────────────────────────────────────── */
+.inspector__section {
+  margin-bottom: 16px;
+}
+.inspector__section + .inspector__section {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+}
+
+.inspector__section-title {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  letter-spacing: var(--tracking-xwide);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin: 0 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.inspector__section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── Type badge ──────────────────────────────────────── */
+.inspector__type {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-strong);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  padding: 4px 10px;
+  border-radius: var(--radius-xs);
+  margin-bottom: 12px;
+}
+
+/* ── Fields ──────────────────────────────────────────── */
 .inspector__field {
   display: flex;
   flex-direction: column;
@@ -27,20 +117,76 @@
   margin-bottom: 10px;
 }
 
+.inspector__field--row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
 .inspector__field label {
-  font-size: 11px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: var(--tracking-xwide);
+  text-transform: uppercase;
   color: var(--text-muted);
 }
 
 .inspector__field input,
-.inspector__field textarea {
-  font-family: inherit;
-  font-size: 13px;
-  padding: 6px 8px;
-  border: 1px solid var(--border);
-  background: var(--bg-elevated);
-  color: var(--text);
-  border-radius: var(--radius-sm);
+.inspector__field textarea,
+.inspector__field select {
+  font-family: var(--font-mono);
+  font-size: var(--fs-base);
+  padding: 7px 9px;
+  border: 1px solid var(--border-input);
+  background: var(--bg-app);
+  color: var(--text-strong);
+  border-radius: var(--radius-xs);
+  transition: border-color 120ms ease, background 120ms ease;
+}
+.inspector__field input[type='text'] {
+  font-family: var(--font-sans);
 }
 
-.inspector__field textarea { resize: vertical; min-height: 60px; }
+.inspector__field input:hover,
+.inspector__field textarea:hover {
+  border-color: var(--border-strong);
+}
+
+.inspector__field input:focus,
+.inspector__field textarea:focus,
+.inspector__field select:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--bg-elevated);
+  box-shadow: 0 0 0 1px var(--accent-soft);
+}
+
+.inspector__field textarea {
+  resize: vertical;
+  min-height: 72px;
+  line-height: 1.5;
+}
+
+.inspector__field input[type='number'] {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hide native number spinners for cleaner look */
+.inspector__field input[type='number']::-webkit-outer-spin-button,
+.inspector__field input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.inspector__field input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.inspector__hint {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-faint);
+  margin-top: 4px;
+  letter-spacing: 0.04em;
+}

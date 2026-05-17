@@ -1,40 +1,153 @@
+/* ============================================================
+   Vibe Node Editor — Design Tokens
+   Direction: "Tactile Blueprint" — precision dev tool aesthetic
+   ============================================================ */
+
 :root {
-  --topbar-height: 48px;
-  --inspector-width: 280px;
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-mono: ui-monospace, "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+  /* ── Layout ────────────────────────────────────────────── */
+  --topbar-height: 52px;
+  --inspector-width: 288px;
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 5px;
+
+  /* ── Typography ────────────────────────────────────────── */
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', Consolas, monospace;
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+
+  --fs-xs: 10.5px;
+  --fs-sm: 11.5px;
+  --fs-base: 13px;
+  --fs-md: 14px;
+  --fs-lg: 16px;
+
+  --tracking-tight: -0.01em;
+  --tracking-wide: 0.08em;
+  --tracking-xwide: 0.14em;
+
+  /* ── Brand accent (yellow honors prototype's bezier color) ─ */
+  --brand: #facc15;
+  --brand-dim: #eab308;
 }
 
+/* ─────────────────────────────────────────────────────────
+   DARK THEME — primary
+   Deep cool neutrals + amber brand + teal selection
+   ───────────────────────────────────────────────────────── */
 :root[data-theme='dark'] {
-  --bg-app: #0f1216;
-  --bg-panel: #161a20;
-  --bg-canvas: #1b1f26;
-  --bg-elevated: #1f242c;
-  --border: #2a313b;
-  --border-strong: #3a4250;
-  --text: #e6eaf0;
-  --text-muted: #8a93a3;
-  --accent: #4ea3ff;
-  --accent-hover: #66b3ff;
-  --success: #4ec27a;
-  --warn: #d9b65a;
-  --error: #e26d6d;
+  --bg-app:        #0a0d11;
+  --bg-panel:      #11151b;
+  --bg-canvas:     #0d1117;
+  --bg-elevated:   #181d25;
+  --bg-overlay:    rgba(10, 13, 17, 0.86);
+
+  --border:        #1f2630;
+  --border-strong: #2d3641;
+  --border-input:  #242b35;
+
+  --text:          #e9edf3;
+  --text-strong:   #f7f9fc;
+  --text-muted:    #7a8597;
+  --text-faint:    #4a5263;
+
+  --accent:        #facc15;        /* brand amber */
+  --accent-hover:  #fde047;
+  --accent-soft:   rgba(250, 204, 21, 0.12);
+
+  --selection:     #06b6d4;        /* teal */
+  --selection-soft: rgba(6, 182, 212, 0.18);
+
+  --success:       #34d399;
+  --warn:          #fbbf24;
+  --error:         #f87171;
+  --error-soft:    rgba(248, 113, 113, 0.14);
+
+  /* Canvas dot-grid (data-URL set by node-theme.js) */
+  --grid-dot:      rgba(255, 255, 255, 0.055);
+  --grid-bg:       #0d1117;
+
+  /* Node header palette */
+  --node-value:    #22c55e;
+  --node-multiply: #3b82f6;
+  --node-default:  #14b8a6;
+  --node-comment-bg:     #1d2a3a;
+  --node-comment-border: #facc15;
+
+  /* Ports */
+  --port-out:      #4ade80;
+  --port-in:       #94a3b8;
+  --port-any:      #c084fc;
+
+  /* Links */
+  --link-default:  #facc15;
+  --link-error:    #f87171;
+  --link-success:  #34d399;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.6);
+
+  /* Focus ring */
+  --ring: 0 0 0 1px var(--bg-app), 0 0 0 3px var(--accent);
+
+  color-scheme: dark;
 }
 
+/* ─────────────────────────────────────────────────────────
+   LIGHT THEME — "blueprint paper"
+   Warm off-white, dark text, brand amber stays
+   ───────────────────────────────────────────────────────── */
 :root[data-theme='light'] {
-  --bg-app: #f5f6f8;
-  --bg-panel: #ffffff;
-  --bg-canvas: #e9ecf1;
-  --bg-elevated: #ffffff;
-  --border: #d6dae0;
-  --border-strong: #b8bdc6;
-  --text: #1d2330;
-  --text-muted: #5b6271;
-  --accent: #2563eb;
-  --accent-hover: #1e4fc7;
-  --success: #2f9d57;
-  --warn: #b88500;
-  --error: #c53b3b;
+  --bg-app:        #f3f1ea;        /* paper warmth */
+  --bg-panel:      #faf8f3;
+  --bg-canvas:     #efece4;
+  --bg-elevated:   #ffffff;
+  --bg-overlay:    rgba(250, 248, 243, 0.92);
+
+  --border:        #d9d4c5;
+  --border-strong: #b8b09c;
+  --border-input:  #cfc9b8;
+
+  --text:          #1a1d22;
+  --text-strong:   #0c0e11;
+  --text-muted:    #6b6557;
+  --text-faint:    #9a9485;
+
+  --accent:        #b8860b;        /* deepened amber for contrast */
+  --accent-hover:  #9e7300;
+  --accent-soft:   rgba(184, 134, 11, 0.12);
+
+  --selection:     #0e7490;
+  --selection-soft: rgba(14, 116, 144, 0.14);
+
+  --success:       #15803d;
+  --warn:          #a16207;
+  --error:         #b91c1c;
+  --error-soft:    rgba(185, 28, 28, 0.10);
+
+  --grid-dot:      rgba(30, 58, 138, 0.10);  /* blueprint blue */
+  --grid-bg:       #efece4;
+
+  --node-value:    #16a34a;
+  --node-multiply: #1d4ed8;
+  --node-default:  #0d9488;
+  --node-comment-bg:     #fffbe8;
+  --node-comment-border: #b8860b;
+
+  --port-out:      #15803d;
+  --port-in:       #475569;
+  --port-any:      #7c3aed;
+
+  --link-default:  #b8860b;
+  --link-error:    #b91c1c;
+  --link-success:  #15803d;
+
+  --shadow-sm: 0 1px 2px rgba(40, 30, 10, 0.08);
+  --shadow-md: 0 4px 12px rgba(40, 30, 10, 0.12);
+  --shadow-lg: 0 12px 36px rgba(40, 30, 10, 0.18);
+
+  --ring: 0 0 0 1px var(--bg-app), 0 0 0 3px var(--accent);
+
+  color-scheme: light;
 }
