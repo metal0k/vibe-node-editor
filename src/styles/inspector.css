@@ -1,0 +1,46 @@
+.inspector {
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border);
+  padding: 12px;
+  overflow-y: auto;
+}
+
+.inspector__title {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.inspector__empty {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin: 0;
+}
+
+.inspector__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.inspector__field label {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.inspector__field input,
+.inspector__field textarea {
+  font-family: inherit;
+  font-size: 13px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+}
+
+.inspector__field textarea { resize: vertical; min-height: 60px; }
