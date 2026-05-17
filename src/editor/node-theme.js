@@ -36,6 +36,7 @@ function paint(lcanvas) {
   LiteGraph.NODE_TITLE_TEXT_COLOR = '#ffffff';   // always light over muted header
   LiteGraph.NODE_SELECTED_TITLE_COLOR = '#ffffff';
   LiteGraph.NODE_DEFAULT_BOXCOLOR = v('--selection');
+  LiteGraph.NODE_BOX_OUTLINE_COLOR = v('--selection');   // selected-node ring
   LiteGraph.NODE_DEFAULT_BGCOLOR = v('--bg-elevated');
   LiteGraph.WIDGET_BGCOLOR = v('--bg-app');
   LiteGraph.WIDGET_OUTLINE_COLOR = v('--border-strong');

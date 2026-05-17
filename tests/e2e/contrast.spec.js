@@ -206,7 +206,10 @@ for (const theme of THEMES) {
         add('comment title on bg', v('--canvas-comment-title'), commentBg, T_LARGE);
         add('comment body on bg', v('--canvas-comment-body'), commentBg, T_NORMAL);
 
-        // 6. Canvas status badge "Live" — text-muted on bg-overlay over bg-canvas
+        // 6. Selected-node outline ring against canvas bg
+        add('selected-node outline on canvas', LG.NODE_BOX_OUTLINE_COLOR, v('--bg-canvas'), T_LARGE);
+
+        // 7. Canvas status badge "Live" — text-muted on bg-overlay over bg-canvas
         const overlayBg = v('--bg-overlay'); // rgba — needs canvas composite
         const canvasBg = v('--bg-canvas');
         // approximate composite of overlay over canvas
