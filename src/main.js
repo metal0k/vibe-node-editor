@@ -10,6 +10,7 @@ import { initEditor } from './editor/setup.js';
 import { applyNodeTheme } from './editor/node-theme.js';
 import { initPersistence } from './editor/persistence.js';
 import { initValidator } from './editor/validator.js';
+import { initShortcuts } from './editor/shortcuts.js';
 import { buildSampleGraph } from './editor/sample-graph.js';
 
 initTheme();
@@ -21,6 +22,8 @@ initInspector({ graph, lcanvas });
 
 const validate = initValidator({ graph, lcanvas });
 setValidateHandler(validate);
+
+initShortcuts({ graph, lcanvas });
 
 const source = initPersistence({ graph, lcanvas });
 if (source === 'sample') {
