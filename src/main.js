@@ -5,11 +5,13 @@ import './styles/inspector.css';
 
 import { initTheme } from './ui/theme.js';
 import { initToolbar } from './ui/toolbar.js';
+import { initInspector } from './ui/inspector.js';
 import { initEditor } from './editor/setup.js';
 import { applyNodeTheme } from './editor/node-theme.js';
 
 initTheme();
 initToolbar();
 
-const { lcanvas } = initEditor();
+const { graph, lcanvas } = initEditor();
 applyNodeTheme(lcanvas);
+initInspector({ graph, lcanvas });
