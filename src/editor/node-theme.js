@@ -4,6 +4,7 @@
  * LGraphCanvas + each node. Re-applies on theme change.
  */
 
+import { LiteGraph } from 'litegraph.js';
 import { onThemeChange } from '../ui/theme.js';
 
 const NODE_TYPE_COLORS = {
@@ -26,13 +27,33 @@ function paint(lcanvas) {
   const css = getComputedStyle(document.documentElement);
   const v = (name) => css.getPropertyValue(name).trim();
 
+  /* ── LiteGraph globals — node body text, widgets, defaults ───
+     LiteGraph reads these constants per render, so updating them
+     refreshes the next draw (after setDirty). Drives port label
+     contrast against node body bg. */
+  LiteGraph.NODE_TEXT_COLOR = v('--text');
+  LiteGraph.NODE_TEXT_HIGHLIGHT_COLOR = v('--text-strong');
+  LiteGraph.NODE_TITLE_TEXT_COLOR = '#ffffff';   // always light over muted header
+  LiteGraph.NODE_SELECTED_TITLE_COLOR = '#ffffff';
+  LiteGraph.NODE_DEFAULT_BOXCOLOR = v('--selection');
+  LiteGraph.NODE_DEFAULT_BGCOLOR = v('--bg-elevated');
+  LiteGraph.WIDGET_BGCOLOR = v('--bg-app');
+  LiteGraph.WIDGET_OUTLINE_COLOR = v('--border-strong');
+  LiteGraph.WIDGET_TEXT_COLOR = v('--text-strong');
+  LiteGraph.WIDGET_SECONDARY_TEXT_COLOR = v('--text-muted');
+
   /* ── Canvas background + dot grid via data-URL ───────────── */
   lcanvas.clear_background = true;
   lcanvas.clear_background_color = v('--bg-canvas');
   lcanvas.background_image = buildDotGrid(v('--grid-dot'));
 
-  /* ── Connection lines ────────────────────────────────────── */
+  /* Also override LGraphCanvas instance text colors that fall back
+     to its own defaults rather than the LiteGraph globals. */
+  lcanvas.node_title_color = '#ffffff';
   lcanvas.default_link_color = v('--link-default');
+  lcanvas.node_text_color = v('--text');
+
+  /* ── Connection lines ────────────────────────────────────── */
   lcanvas.default_connection_color_byType = {
     number:  v('--link-default'),
     string:  v('--port-any'),

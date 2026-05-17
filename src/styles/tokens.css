@@ -1,6 +1,7 @@
 /* ============================================================
    Vibe Node Editor — Design Tokens
    Direction: "Tactile Blueprint" — precision dev tool aesthetic
+   Iteration 2: muted node tags + cool-neutral light theme
    ============================================================ */
 
 :root {
@@ -66,17 +67,17 @@
   --grid-dot:      rgba(255, 255, 255, 0.055);
   --grid-bg:       #0d1117;
 
-  /* Node header palette */
-  --node-value:    #22c55e;
-  --node-multiply: #3b82f6;
-  --node-default:  #14b8a6;
-  --node-comment-bg:     #1d2a3a;
-  --node-comment-border: #facc15;
+  /* Node header palette — muted "tag" tones, ~17–22% saturation */
+  --node-value:    #5e8a72;   /* sage          hsl(146, 19%, 45%) */
+  --node-multiply: #5d6f92;   /* slate-indigo  hsl(220, 22%, 47%) */
+  --node-default:  #5d8585;   /* muted teal    hsl(180, 18%, 44%) */
+  --node-comment-bg:     #2a261a;   /* warm dark sticky-note */
+  --node-comment-border: #a88a2a;   /* dimmed amber */
 
-  /* Ports */
-  --port-out:      #4ade80;
-  --port-in:       #94a3b8;
-  --port-any:      #c084fc;
+  /* Ports — softer, less neon */
+  --port-out:      #82a795;
+  --port-in:       #8590a3;
+  --port-any:      #a08fc4;
 
   /* Links */
   --link-default:  #facc15;
@@ -95,57 +96,61 @@
 }
 
 /* ─────────────────────────────────────────────────────────
-   LIGHT THEME — "blueprint paper"
-   Warm off-white, dark text, brand amber stays
+   LIGHT THEME — cool-neutral (Linear / Vercel)
+   Slight cool cast on whites, near-black text, deep amber accent
    ───────────────────────────────────────────────────────── */
 :root[data-theme='light'] {
-  --bg-app:        #f3f1ea;        /* paper warmth */
-  --bg-panel:      #faf8f3;
-  --bg-canvas:     #efece4;
+  --bg-app:        #f7f8f9;        /* cool gray-50 */
+  --bg-panel:      #ffffff;
+  --bg-canvas:     #fafbfc;
   --bg-elevated:   #ffffff;
-  --bg-overlay:    rgba(250, 248, 243, 0.92);
+  --bg-overlay:    rgba(255, 255, 255, 0.92);
 
-  --border:        #d9d4c5;
-  --border-strong: #b8b09c;
-  --border-input:  #cfc9b8;
+  --border:        #e6e8ec;        /* zinc-200 cool */
+  --border-strong: #cdd1d8;
+  --border-input:  #d8dce2;
 
-  --text:          #1a1d22;
-  --text-strong:   #0c0e11;
-  --text-muted:    #6b6557;
-  --text-faint:    #9a9485;
+  --text:          #15181d;        /* near-black, cool */
+  --text-strong:   #0a0c0f;
+  --text-muted:    #5e6470;
+  --text-faint:    #9aa0aa;
 
-  --accent:        #b8860b;        /* deepened amber for contrast */
-  --accent-hover:  #9e7300;
-  --accent-soft:   rgba(184, 134, 11, 0.12);
+  --accent:        #a17400;        /* deep amber, readable on white */
+  --accent-hover:  #7f5b00;
+  --accent-soft:   rgba(161, 116, 0, 0.10);
 
-  --selection:     #0e7490;
-  --selection-soft: rgba(14, 116, 144, 0.14);
+  --selection:     #0891b2;        /* teal-600 */
+  --selection-soft: rgba(8, 145, 178, 0.10);
 
-  --success:       #15803d;
+  --success:       #16a34a;
   --warn:          #a16207;
-  --error:         #b91c1c;
-  --error-soft:    rgba(185, 28, 28, 0.10);
+  --error:         #dc2626;
+  --error-soft:    rgba(220, 38, 38, 0.10);
 
-  --grid-dot:      rgba(30, 58, 138, 0.10);  /* blueprint blue */
-  --grid-bg:       #efece4;
+  --grid-dot:      rgba(15, 23, 42, 0.06);   /* slate-900 @ 6% */
+  --grid-bg:       #fafbfc;
 
-  --node-value:    #16a34a;
-  --node-multiply: #1d4ed8;
-  --node-default:  #0d9488;
-  --node-comment-bg:     #fffbe8;
-  --node-comment-border: #b8860b;
+  /* Node header palette — desaturated for white bg */
+  --node-value:    #4d7762;   /* deeper sage   hsl(146, 21%, 38%) */
+  --node-multiply: #4e5e80;   /* deeper indigo hsl(222, 24%, 40%) */
+  --node-default:  #4d7070;   /* deeper teal   hsl(180, 18%, 37%) */
+  --node-comment-bg:     #fdf8e6;   /* warm cream sticky-note */
+  --node-comment-border: #a17400;
 
-  --port-out:      #15803d;
-  --port-in:       #475569;
-  --port-any:      #7c3aed;
+  /* Ports */
+  --port-out:      #4d7762;
+  --port-in:       #5e6470;
+  --port-any:      #6f4ea8;
 
-  --link-default:  #b8860b;
-  --link-error:    #b91c1c;
-  --link-success:  #15803d;
+  /* Links */
+  --link-default:  #a17400;
+  --link-error:    #dc2626;
+  --link-success:  #16a34a;
 
-  --shadow-sm: 0 1px 2px rgba(40, 30, 10, 0.08);
-  --shadow-md: 0 4px 12px rgba(40, 30, 10, 0.12);
-  --shadow-lg: 0 12px 36px rgba(40, 30, 10, 0.18);
+  /* Shadows — soft cool */
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 12px 36px rgba(15, 23, 42, 0.12);
 
   --ring: 0 0 0 1px var(--bg-app), 0 0 0 3px var(--accent);
 
