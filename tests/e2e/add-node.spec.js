@@ -5,7 +5,7 @@ test.describe('add node', () => {
     await page.addInitScript(() => {
       try { localStorage.removeItem('vibe:graph'); } catch (e) {}
     });
-    await page.goto('/');
+    await page.goto('./');
     await page.waitForFunction(() => window.__editor?.graph?._nodes?.length > 0);
 
     const before = await page.evaluate(() => window.__editor.graph._nodes.length);

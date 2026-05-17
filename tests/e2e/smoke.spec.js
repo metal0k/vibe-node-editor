@@ -13,7 +13,7 @@ test.describe('smoke', () => {
       try { localStorage.removeItem('vibe:graph'); } catch (e) {}
     });
 
-    await page.goto('/');
+    await page.goto('./');
 
     await expect(page.locator('#graph-canvas')).toBeVisible();
     await expect(page.locator('#topbar')).toBeVisible();

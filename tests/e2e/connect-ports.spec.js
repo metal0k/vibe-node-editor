@@ -5,7 +5,7 @@ test.describe('connect ports', () => {
     await page.addInitScript(() => {
       try { localStorage.removeItem('vibe:graph'); } catch (e) {}
     });
-    await page.goto('/');
+    await page.goto('./');
     await page.waitForFunction(() => window.__editor?.graph?._nodes?.length > 0);
 
     // Add a fresh, isolated Multiply node positioned away from other nodes,

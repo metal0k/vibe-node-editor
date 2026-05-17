@@ -8,7 +8,7 @@ test.describe('reactive execution + JSON round-trip', () => {
   });
 
   test('changing Value A propagates through Multiply', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('./');
     await page.waitForFunction(() => window.__editor?.graph?._nodes?.length > 0);
 
     // Set Value A = 7, force step, then read Multiply result
@@ -32,7 +32,7 @@ test.describe('reactive execution + JSON round-trip', () => {
   });
 
   test('serialize → configure round-trip preserves structure', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('./');
     await page.waitForFunction(() => window.__editor?.graph?._nodes?.length > 0);
 
     const diff = await page.evaluate(() => {
@@ -57,7 +57,7 @@ test.describe('reactive execution + JSON round-trip', () => {
   });
 
   test('Save JSON triggers a download', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('./');
     await page.waitForFunction(() => window.__editor?.graph?._nodes?.length > 0);
 
     const [download] = await Promise.all([
